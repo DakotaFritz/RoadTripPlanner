@@ -5,4 +5,14 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="GoogleApi" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Cloudikka.PolylineAlgorithm" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="GoogleApi" Version="3.10.10" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Cloudikka.PolylineAlgorithm" Version="1.0.0.1123" />
+  </ItemGroup>
 </Project>
