@@ -14,11 +14,10 @@ namespace RoadTripPlannerProject
         public double Longitude { get; set; }
         public double Latitude { get; set; }
 
-        public static CurrentLocation CallApi(string location)
+        public static CurrentLocation CallApi(string location, string apiKey)
         {
             string geoCodeApiLink = String.Format("https://maps.googleapis.com/maps/api/geocode/json?");
             string locationQuery = location.Replace(" ", "+");
-            string apiKey = "AIzaSyCQJzPJAmy6yLqH2wgncjyaDAPKCQvheRE";
             using (var webClient = new WebClient())
             {
                 string apiResponse = webClient.DownloadString($"{geoCodeApiLink}address={locationQuery}&key={apiKey}");

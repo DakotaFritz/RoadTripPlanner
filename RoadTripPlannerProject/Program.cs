@@ -11,7 +11,6 @@ namespace RoadTripPlannerProject
     {
         static void Main(string[] args)
         {
-
             Console.WriteLine("Hello, I’m here to help you plan stops on your road trip! As we begin, I’m going to ask you a few questions to help make some calculations and get you the best results.");
             Console.WriteLine("Are you ready to begin ?");
             string ready = Console.ReadLine();
@@ -20,7 +19,9 @@ namespace RoadTripPlannerProject
             {
                 Console.WriteLine("Great! Please start by telling me your current location.");
                 string locationInput = Console.ReadLine();
-                CurrentLocation currentLocation = new CurrentLocation(CurrentLocation.CallApi(locationInput).Location, CurrentLocation.CallApi(locationInput).Longitude, CurrentLocation.CallApi(locationInput).Latitude);
+                Console.WriteLine("Sorry to bug you, but can you give me your API Key?");
+                string ApiKey = Console.ReadLine();
+                CurrentLocation currentLocation = new CurrentLocation(CurrentLocation.CallApi(locationInput, ApiKey).Location, CurrentLocation.CallApi(locationInput, ApiKey).Longitude, CurrentLocation.CallApi(locationInput, ApiKey).Latitude);
                 Console.WriteLine($"Your current location is {currentLocation.Location} and the coordinates are {currentLocation.Longitude}, {currentLocation.Latitude}");
             }
             else
