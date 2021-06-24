@@ -41,11 +41,13 @@ namespace RoadTripPlannerProject
         {
             [JsonProperty(PropertyName = "address_components")]
             public List<AddressComponent> AddressComponents { get; set; }
-            public string formatted_address { get; set; }
+            [JsonProperty(PropertyName = "formatted_address")]
+            public string FormattedAddress { get; set; }
             [JsonProperty(PropertyName = "geometry")]
             public Geometry Geometry { get; set; }
-            public bool partial_match { get; set; }
-            public List<string> types { get; set; }
+            [JsonProperty(PropertyName = "place_id")]
+            public string PlaceId { get; set; }
+
         }
 
         public class RootObject

@@ -21,16 +21,16 @@ namespace RoadTripPlannerProject
                 string CurrentLocationInput = Console.ReadLine();
                 Console.WriteLine("Sorry to bug you, but can you give me your API Key?");
                 string ApiKey = Console.ReadLine();
-                LocationWithGeoCode CurrentLocation = new LocationWithGeoCode(LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey).Location, LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey).Longitude, LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey).Latitude);
+                LocationWithGeoCode CurrentLocation = new LocationWithGeoCode(LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey).Location, LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey).PlaceId, LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey).Longitude, LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey).Latitude);
                 Console.WriteLine($"Thank you for letting me know that you are in {CurrentLocation.Location}. Where are you driving to?");
                 string DestinationInput = Console.ReadLine();
-                LocationWithGeoCode DestinationLocation = new LocationWithGeoCode(LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Location, LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Longitude, LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Latitude);
+                LocationWithGeoCode DestinationLocation = new LocationWithGeoCode(LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Location, LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).PlaceId, LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Longitude, LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Latitude);
                 Console.WriteLine($"Thank you! Just to confirm, you are currently in {CurrentLocation.Location} and driving to {DestinationLocation.Location}, right? If this is incorrect, please type \"No\"");
                 string confirmLocations = Console.ReadLine();
                 if (confirmLocations.ToLower() != "no")
                 {
                     Console.WriteLine("Thank you for confirming! Please give me just a second as I calculate your route.");
-                    LocationWithGeoCode.CallDirectionsApi(CurrentLocation.Location, DestinationLocation.Location, "AIzaSyCQJzPJAmy6yLqH2wgncjyaDAPKCQvheRE");
+                    LocationWithGeoCode.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
                 }
             }
             else

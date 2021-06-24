@@ -11,6 +11,7 @@ namespace RoadTripPlannerProject
     public class LocationWithGeoCode
     {
         public string Location;
+        public string PlaceId { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
 
@@ -22,7 +23,7 @@ namespace RoadTripPlannerProject
             {
                 string apiResponse = webClient.DownloadString($"{GeoCodeApiLink}address={LocationQuery}&key={apiKey}");
                 GeoCodeApiResponse.RootObject ResponseObjects = JsonConvert.DeserializeObject<GeoCodeApiResponse.RootObject>(apiResponse);
-                LocationWithGeoCode currentLocation = new LocationWithGeoCode(ResponseObjects.Results1[0].AddressComponents[0].short_name, ResponseObjects.Results1[0].Geometry.Location.Lng, ResponseObjects.Results1[0].Geometry.Location.Lat) ;
+                LocationWithGeoCode currentLocation = new LocationWithGeoCode(ResponseObjects.Results1[0].FormattedAddress, ResponseObjects.Results1[0].PlaceId, ResponseObjects.Results1[0].Geometry.Location.Lng, ResponseObjects.Results1[0].Geometry.Location.Lat) ;
                 return currentLocation;
             }
         }
@@ -40,9 +41,10 @@ namespace RoadTripPlannerProject
             }
         }
 
-        public LocationWithGeoCode(string location, double longitude, double latitude)
+        public LocationWithGeoCode(string location, string placeId, double longitude, double latitude)
         {
             Location = location;
+            PlaceId = placeId;
             Longitude = longitude;
             Latitude = latitude;
         }
