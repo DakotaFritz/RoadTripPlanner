@@ -21,7 +21,8 @@ namespace RoadTripPlannerProject
                 string CurrentLocationInput = Console.ReadLine();
                 Console.WriteLine("Sorry to bug you, but can you give me your API Key?");
                 string ApiKey = Console.ReadLine();
-                LocationWithGeoCode CurrentLocation = new LocationWithGeoCode(LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey).Location, LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey).PlaceId, LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey).Longitude, LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey).Latitude);
+                var currentLocationApiCall = LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey);
+                LocationWithGeoCode CurrentLocation = new LocationWithGeoCode(currentLocationApiCall.Location, currentLocationApiCall.PlaceId, currentLocationApiCall.Longitude, currentLocationApiCall.Latitude);
                 Console.WriteLine($"Thank you for letting me know that you are in {CurrentLocation.Location}. Where are you driving to?");
                 string DestinationInput = Console.ReadLine();
                 LocationWithGeoCode DestinationLocation = new LocationWithGeoCode(LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Location, LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).PlaceId, LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Longitude, LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Latitude);
