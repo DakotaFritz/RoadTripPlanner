@@ -25,13 +25,18 @@ namespace RoadTripPlannerProject
                 LocationWithGeoCode CurrentLocation = new LocationWithGeoCode(currentLocationApiCall.Location, currentLocationApiCall.PlaceId, currentLocationApiCall.Longitude, currentLocationApiCall.Latitude);
                 Console.WriteLine($"Thank you for letting me know that you are in {CurrentLocation.Location}. Where are you driving to?");
                 string DestinationInput = Console.ReadLine();
-                LocationWithGeoCode DestinationLocation = new LocationWithGeoCode(LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Location, LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).PlaceId, LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Longitude, LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey).Latitude);
+                var DestinationApiCall = LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey);
+                LocationWithGeoCode DestinationLocation = new LocationWithGeoCode(DestinationApiCall.Location, DestinationApiCall.PlaceId, DestinationApiCall.Longitude, DestinationApiCall.Latitude);
                 Console.WriteLine($"Thank you! Just to confirm, you are currently in {CurrentLocation.Location} and driving to {DestinationLocation.Location}, right? If this is incorrect, please type \"No\"");
                 string confirmLocations = Console.ReadLine();
                 if (confirmLocations.ToLower() != "no")
                 {
                     Console.WriteLine("Thank you for confirming! Please give me just a second as I calculate your route.");
-                    LocationWithGeoCode.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
+                    var DirectionsApiCall = LocationWithGeoCode.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
+                    Directions CurrentDirections = new Directions(DirectionsApiCall.Distance, DirectionsApiCall.Duration, DirectionsApiCall.RouteSummary);
+                    Console.WriteLine(CurrentDirections.Distance);
+                    Console.WriteLine(CurrentDirections.Duration);
+                    Console.WriteLine(CurrentDirections.RouteSummary);
                 }
             }
             else

@@ -28,7 +28,7 @@ namespace RoadTripPlannerProject
             }
         }
 
-        public static void CallDirectionsApi(string currentLocation, string destination, string apiKey)
+        public static Directions CallDirectionsApi(string currentLocation, string destination, string apiKey)
         {
             string DirectionsApiLink = "https://maps.googleapis.com/maps/api/directions/json?";
             string CurrentLocation = currentLocation.Replace(" ", "+");
@@ -38,6 +38,7 @@ namespace RoadTripPlannerProject
                 string apiResponse = webClient.DownloadString($"{DirectionsApiLink}origin=place_id:{CurrentLocation}&destination=place_id:{Destination}&key={apiKey}");
                 DirectionsApiResponse.Root ResponseObjects = JsonConvert.DeserializeObject<DirectionsApiResponse.Root>(apiResponse);
                 Console.WriteLine($"It looks like you'll arrive in approximately {ResponseObjects.routes[0].legs[0].duration.text}");
+                return new Directions(ResponseObjects.routes[0].legs[0].distance.text, ResponseObjects.routes[0].legs[0].duration.text, ResponseObjects.routes[0].summary);
             }
         }
 
