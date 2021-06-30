@@ -38,7 +38,7 @@ namespace RoadTripPlannerProject
                 string apiResponse = webClient.DownloadString($"{DirectionsApiLink}origin=place_id:{CurrentLocation}&destination=place_id:{Destination}&key={apiKey}");
                 DirectionsApiResponse.Root ResponseObjects = JsonConvert.DeserializeObject<DirectionsApiResponse.Root>(apiResponse);
                 Console.WriteLine($"It looks like you'll arrive in approximately {ResponseObjects.routes[0].legs[0].duration.text}");
-                return new Directions(ResponseObjects.routes[0].legs[0].distance.text, ResponseObjects.routes[0].legs[0].duration.text, ResponseObjects.routes[0].summary);
+                return new Directions(ResponseObjects.routes[0].legs[0].distance.text, ResponseObjects.routes[0].legs[0].duration.text, ResponseObjects.routes[0].summary, Directions.Decode(ResponseObjects.routes[0].overview_polyline.points));
             }
         }
 

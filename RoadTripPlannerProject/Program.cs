@@ -33,10 +33,14 @@ namespace RoadTripPlannerProject
                 {
                     Console.WriteLine("Thank you for confirming! Please give me just a second as I calculate your route.");
                     var DirectionsApiCall = LocationWithGeoCode.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
-                    Directions CurrentDirections = new Directions(DirectionsApiCall.Distance, DirectionsApiCall.Duration, DirectionsApiCall.RouteSummary);
+                    Directions CurrentDirections = new Directions(DirectionsApiCall.Distance, DirectionsApiCall.Duration, DirectionsApiCall.RouteSummary, DirectionsApiCall.Points);
                     Console.WriteLine(CurrentDirections.Distance);
                     Console.WriteLine(CurrentDirections.Duration);
                     Console.WriteLine(CurrentDirections.RouteSummary);
+                    foreach(var p in CurrentDirections.Points)
+                    {
+                        Console.WriteLine($"{p.Longitude}, {p.Latitude}");
+                    }
                 }
             }
             else
