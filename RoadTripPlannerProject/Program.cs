@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -29,6 +30,7 @@ namespace RoadTripPlannerProject
                 LocationWithGeoCode DestinationLocation = new LocationWithGeoCode(DestinationApiCall.Location, DestinationApiCall.PlaceId, DestinationApiCall.Longitude, DestinationApiCall.Latitude);
                 Console.WriteLine($"Thank you! Just to confirm, you are currently in {CurrentLocation.Location} and driving to {DestinationLocation.Location}, right? If this is incorrect, please type \"No\"");
                 string confirmLocations = Console.ReadLine();
+                string Path;
                 if (confirmLocations.ToLower() != "no")
                 {
                     Console.WriteLine("Thank you for confirming! Please give me just a second as I calculate your route.");
@@ -37,10 +39,8 @@ namespace RoadTripPlannerProject
                     Console.WriteLine(CurrentDirections.Distance);
                     Console.WriteLine(CurrentDirections.Duration);
                     Console.WriteLine(CurrentDirections.RouteSummary);
-                    foreach(var p in CurrentDirections.Points)
-                    {
-                        Console.WriteLine($"{p.Longitude}, {p.Latitude}");
-                    }
+                    Path = String.Join("|", from p in CurrentDirections.Points select new { p.Longitude, p.Latitude });
+                    Console.WriteLine(Path);
                 }
             }
             else
