@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -10,6 +11,8 @@ namespace RoadTripPlannerProject
 {
     class Program
     {
+        public static object PolyLineCoordinates { get; private set; }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello, I’m here to help you plan stops on your road trip! As we begin, I’m going to ask you a few questions to help make some calculations and get you the best results.");
@@ -41,6 +44,15 @@ namespace RoadTripPlannerProject
                     Console.WriteLine(CurrentDirections.RouteSummary);
                     Path = String.Join("|", from p in CurrentDirections.Points select new { p.Longitude, p.Latitude });
                     Console.WriteLine(Path);
+                    Console.WriteLine(value: $"The distance between {CurrentDirections.Points.First().Longitude}, {CurrentDirections.Points.First().Latitude} and {CurrentDirections.Points.Last().Longitude}, {CurrentDirections.Points.Last().Latitude} is {NumericExtensions.HaversineDistance(CurrentDirections.Points.First(), CurrentDirections.Points.Last(), NumericExtensions.DistanceUnit.Miles)}");
+                    Console.WriteLine("How Far do you want to go today?");
+                    string drivingStillToday = Console.ReadLine();
+                    double DrivingStillTodayDouble = Double.Parse(drivingStillToday);
+                    List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingStillTodayDouble);
+                    foreach(var p in PointsLeftToday)
+                    {
+                        Console.WriteLine($"{p.Longitude}, {p.Latitude}");
+                    }
                 }
             }
             else
