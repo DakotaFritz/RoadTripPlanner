@@ -27,17 +27,15 @@ namespace RoadTripPlannerProject
         {
             List<PolyLineCoordinates> PointsInDistanceToday = new List<PolyLineCoordinates>();
             double distance = 0;
+            var i = 0;
+            var j = 1;
 
-            for (var i=0; i < points.Count(); i++)
+            while (distanceToday > distance)
             {
-                for (var j=1; j< points.Count(); j++)
-                {
-                    while (distanceToday > distance)
-                    {
-                        distance += HaversineDistance(points.ToList()[i], points.ToList()[j], DistanceUnit.Miles);
-                        PointsInDistanceToday.Add(points.ToList()[i]);
-                    }
-                }
+                distance += HaversineDistance(points.ToList()[i], points.ToList()[j], DistanceUnit.Miles);
+                PointsInDistanceToday.Add(points.ElementAt(i));
+                i++;
+                j++;
             }
             return PointsInDistanceToday;
         }
