@@ -45,13 +45,26 @@ namespace RoadTripPlannerProject
                     Path = String.Join("|", from p in CurrentDirections.Points select new { p.Longitude, p.Latitude });
                     Console.WriteLine(Path);
                     Console.WriteLine(value: $"The distance between {CurrentDirections.Points.First().Longitude}, {CurrentDirections.Points.First().Latitude} and {CurrentDirections.Points.Last().Longitude}, {CurrentDirections.Points.Last().Latitude} is {NumericExtensions.HaversineDistance(CurrentDirections.Points.First(), CurrentDirections.Points.Last(), NumericExtensions.DistanceUnit.Miles)}");
-                    Console.WriteLine("How Far do you want to go today?");
+                    Console.WriteLine("How far do you want to go today?");
                     string drivingStillToday = Console.ReadLine();
                     double DrivingStillTodayDouble = Double.Parse(drivingStillToday);
                     List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingStillTodayDouble);
-                    foreach(var p in PointsLeftToday)
+                    foreach (var p in PointsLeftToday)
                     {
-                        Console.WriteLine($"{p.Longitude}, {p.Latitude}");
+                        Console.WriteLine($"{p.Latitude}, {p.Longitude}");
+                    }
+                    Console.WriteLine($"Hold on one second as I gather information about gas stations around {drivingStillToday} miles from here along your route.");
+                    List<PlacesNearby> GasStationsNearby = PlacesNearby.PlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
+                    foreach (var p in GasStationsNearby)
+                    {
+                        if (p.OpenNow == true)
+                        {
+                            Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"I'm very sorry, but {p.Name} is currently closed");
+                        }
                     }
                 }
             }
