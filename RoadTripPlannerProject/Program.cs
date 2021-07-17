@@ -25,20 +25,20 @@ namespace RoadTripPlannerProject
                 string CurrentLocationInput = Console.ReadLine();
                 Console.WriteLine("Sorry to bug you, but can you give me your API Key?");
                 string ApiKey = Console.ReadLine();
-                var currentLocationApiCall = LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey);
-                LocationWithGeoCode CurrentLocation = new LocationWithGeoCode(currentLocationApiCall.Location, currentLocationApiCall.PlaceId, currentLocationApiCall.Longitude, currentLocationApiCall.Latitude);
+                //var currentLocationApiCall = LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey);
+                LocationWithGeoCode CurrentLocation = LocationWithGeoCode.CallGeoCodeApi(CurrentLocationInput, ApiKey);
                 Console.WriteLine($"Thank you for letting me know that you are in {CurrentLocation.Location}. Where are you driving to?");
                 string DestinationInput = Console.ReadLine();
-                var DestinationApiCall = LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey);
-                LocationWithGeoCode DestinationLocation = new LocationWithGeoCode(DestinationApiCall.Location, DestinationApiCall.PlaceId, DestinationApiCall.Longitude, DestinationApiCall.Latitude);
+                //var DestinationApiCall = LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey);
+                LocationWithGeoCode DestinationLocation = LocationWithGeoCode.CallGeoCodeApi(DestinationInput, ApiKey);
                 Console.WriteLine($"Thank you! Just to confirm, you are currently in {CurrentLocation.Location} and driving to {DestinationLocation.Location}, right? If this is incorrect, please type \"No\"");
                 string confirmLocations = Console.ReadLine();
                 string Path;
                 if (confirmLocations.ToLower() != "no")
                 {
                     Console.WriteLine("Thank you for confirming! Please give me just a second as I calculate your route.");
-                    var DirectionsApiCall = LocationWithGeoCode.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
-                    Directions CurrentDirections = new Directions(DirectionsApiCall.Distance, DirectionsApiCall.Duration, DirectionsApiCall.RouteSummary, DirectionsApiCall.Points);
+                    //var DirectionsApiCall = LocationWithGeoCode.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
+                    Directions CurrentDirections = LocationWithGeoCode.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
                     Console.WriteLine(CurrentDirections.Distance);
                     Console.WriteLine(CurrentDirections.Duration);
                     Console.WriteLine(CurrentDirections.RouteSummary);
@@ -54,17 +54,10 @@ namespace RoadTripPlannerProject
                         Console.WriteLine($"{p.Latitude}, {p.Longitude}");
                     }
                     Console.WriteLine($"Hold on one second as I gather information about gas stations around {drivingStillToday} miles from here along your route.");
-                    List<PlacesNearby> GasStationsNearby = PlacesNearby.PlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
+                    var GasStationsNearby = PlacesNearby.PlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
                     foreach (var p in GasStationsNearby)
                     {
-                        if (p.OpenNow == true)
-                        {
-                            Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"I'm very sorry, but {p.Name} is currently closed");
-                        }
+                        Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
                     }
                 }
             }

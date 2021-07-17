@@ -10,7 +10,6 @@ namespace RoadTripPlannerProject
     {
         public string Name { get; set; }
         public string PlaceId { get; set; }
-        public bool OpenNow { get; set; }
 
         public static List<PlacesNearby> PlacesNearbyApi(List<PolyLineCoordinates> endLocation, string typeOfPlace, string apiKey)
         {
@@ -23,18 +22,17 @@ namespace RoadTripPlannerProject
                 var ResultsList = new List<PlacesNearby>();
                 foreach (var r in ResponseObjects.results)
                 {
-                    var placesResponse = new PlacesNearby(r.name, r.place_id, r.opening_hours.open_now);
+                    var placesResponse = new PlacesNearby(r.name, r.place_id);
                     ResultsList.Add(placesResponse);
                 }
                 return ResultsList;
             }
         }
 
-        public PlacesNearby(string name, string placeId, bool openNow)
+        public PlacesNearby(string name, string placeId)
         {
             Name = name;
             PlaceId = placeId;
-            OpenNow = openNow;
         }
     }
 }
