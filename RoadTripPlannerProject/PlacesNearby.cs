@@ -11,24 +11,6 @@ namespace RoadTripPlannerProject
         public string Name { get; set; }
         public string PlaceId { get; set; }
 
-        public static List<PlacesNearby> PlacesNearbyApi(List<PolyLineCoordinates> endLocation, string typeOfPlace, string apiKey)
-        {
-            string PlacesNearbyApiLink = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
-            string EndLocation = $"{endLocation.Last().Latitude}, {endLocation.Last().Longitude}";
-            using (var webClient = new WebClient())
-            {
-                string apiResponse = webClient.DownloadString($"{PlacesNearbyApiLink}location={EndLocation}&radius=8000&type={typeOfPlace}&key={apiKey}");
-                PlacesNearbyApiResponse.Root ResponseObjects = JsonConvert.DeserializeObject<PlacesNearbyApiResponse.Root>(apiResponse);
-                var ResultsList = new List<PlacesNearby>();
-                foreach (var r in ResponseObjects.results)
-                {
-                    var placesResponse = new PlacesNearby(r.name, r.place_id);
-                    ResultsList.Add(placesResponse);
-                }
-                return ResultsList;
-            }
-        }
-
         public PlacesNearby(string name, string placeId)
         {
             Name = name;
