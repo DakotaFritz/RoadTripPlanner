@@ -35,7 +35,7 @@ namespace RoadTripPlannerProject
                 LocationWithGeoCode DestinationLocation = ApiCalls.CallGeoCodeApi(DestinationInput, ApiKey);
                 Console.WriteLine($"Thank you! Just to confirm, you are currently in {CurrentLocation.Location} and driving to {DestinationLocation.Location}, right? If this is incorrect, please type \"No\"");
                 string confirmLocations = Console.ReadLine();
-                if (confirmLocations.ToLower() != "no")
+                if (!NegInputOpt.Contains(confirmLocations.ToLower()))
                 {
                     Console.WriteLine("Thank you for confirming! Please give me just a second as I calculate your route.");
                     Directions CurrentDirections = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
@@ -52,7 +52,7 @@ namespace RoadTripPlannerProject
                     {
                         Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
                         string GasChoice = Console.ReadLine();
-                        if (GasChoice.ToLower() == "Yes")
+                        if (PosInputOpt.Contains(GasChoice.ToLower()))
                         {
                             Console.WriteLine($"Please hold one second as I get directions to {p.Name}");
                             Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, p.PlaceId, ApiKey);
