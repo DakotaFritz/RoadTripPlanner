@@ -1,9 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
-using GoogleApi.Entities.Places.Search;
-using Newtonsoft.Json;
 
 namespace RoadTripPlannerProject
 
