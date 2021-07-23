@@ -8,6 +8,9 @@ namespace RoadTripPlannerProject
 {
     public class ApiCalls
     {
+        public static string[] GeoCodeErrArr = { "ZERO_RESULTS", "OVER_DAILY_LIMIT", "OVER_QUERY_LIMIT", "REQUEST_DENIED", "INVALID_REQUEST", "UNKNOWN_ERROR" };
+        public static List<string> GeoCodeErr = new List<string>(GeoCodeErrArr);
+
         public static LocationWithGeoCode CallGeoCodeApi(string location, string apiKey)
         {
             string GeoCodeApiLink = "https://maps.googleapis.com/maps/api/geocode/json?";
@@ -16,8 +19,16 @@ namespace RoadTripPlannerProject
             {
                 string apiResponse = webClient.DownloadString($"{GeoCodeApiLink}address={LocationQuery}&key={apiKey}");
                 GeoCodeApiResponse.RootObject ResponseObjects = JsonConvert.DeserializeObject<GeoCodeApiResponse.RootObject>(apiResponse);
-                LocationWithGeoCode currentLocation = new LocationWithGeoCode(ResponseObjects.Results1[0].FormattedAddress, ResponseObjects.Results1[0].PlaceId, ResponseObjects.Results1[0].Geometry.Location.Lng, ResponseObjects.Results1[0].Geometry.Location.Lat);
-                return currentLocation;
+                if (!GeoCodeErr.Contains(ResponseObjects.Status))
+                {
+                    LocationWithGeoCode currentLocation = new LocationWithGeoCode(ResponseObjects.Status, ResponseObjects.Results1[0].FormattedAddress, ResponseObjects.Results1[0].PlaceId, ResponseObjects.Results1[0].Geometry.Location.Lng, ResponseObjects.Results1[0].Geometry.Location.Lat);
+                    return currentLocation;
+                }
+                else
+                {
+                    LocationWithGeoCode errorLocation = new LocationWithGeoCode(ResponseObjects.Status, "", "", 0, 0);
+                    return errorLocation;
+                }
             }
         }
 
