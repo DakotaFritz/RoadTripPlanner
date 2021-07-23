@@ -40,53 +40,101 @@ namespace RoadTripPlannerProject
                                 if (!ApiCalls.GeoCodeErr.Contains(CurrentLocation.Status))
                                 {
                                     FirstApiSuccess = true;
-                                    Console.WriteLine($"Thank you for letting me know that you are in {CurrentLocation.Location}. Where are you driving to?");
-                                    string DestinationInput = Console.ReadLine();
-                                    LocationWithGeoCode DestinationLocation = ApiCalls.CallGeoCodeApi(DestinationInput, ApiKey);
-                                    Console.WriteLine($"Thank you! Just to confirm, you are currently in {CurrentLocation.Location} and driving to {DestinationLocation.Location}, right? If this is incorrect, please type \"No\"");
-                                    string confirmLocations = Console.ReadLine();
-                                    if (!NegInputOpt.Contains(confirmLocations.ToLower()))
+                                    Console.WriteLine($"Thank you for letting me know that you are in {CurrentLocation.Location}.");
+                                    bool SecondApiSuccess = false;
+                                    while (SecondApiSuccess == false)
                                     {
-                                        Console.WriteLine("Thank you for confirming! Please give me just a second as I calculate your route.");
-                                        Directions CurrentDirections = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
-                                        Console.WriteLine(CurrentDirections.Distance);
-                                        Console.WriteLine(CurrentDirections.Duration);
-                                        Console.WriteLine(CurrentDirections.RouteSummary);
-                                        Console.WriteLine("How far do you want to go today?");
-                                        string drivingStillToday = Console.ReadLine();
-                                        double DrivingStillTodayDouble = Double.Parse(drivingStillToday);
-                                        List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingStillTodayDouble);
-                                        Console.WriteLine($"Hold on one second as I gather information about gas stations around {drivingStillToday} miles from here along your route.");
-                                        var GasStationsNearby = ApiCalls.CallPlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
-                                        foreach (var p in GasStationsNearby)
+                                        Console.WriteLine("Where are you driving to?");
+                                        string DestinationInput = Console.ReadLine();
+                                        LocationWithGeoCode DestinationLocation = ApiCalls.CallGeoCodeApi(DestinationInput, ApiKey);
+                                        if (!ApiCalls.GeoCodeErr.Contains(DestinationLocation.Status))
                                         {
-                                            Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
-                                            string GasChoice = Console.ReadLine();
-                                            if (PosInputOpt.Contains(GasChoice.ToLower()))
+                                            SecondApiSuccess = true;
+                                            Console.WriteLine($"Thank you! Just to confirm, you are currently in {CurrentLocation.Location} and driving to {DestinationLocation.Location}, right? If this is incorrect, please type \"No\"");
+
+                                            bool LocationConfirmed = false;
+                                            while (LocationConfirmed == false)
                                             {
-                                                Console.WriteLine($"Please hold one second as I get directions to {p.Name}");
-                                                Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, p.PlaceId, ApiKey);
-                                                Console.WriteLine($"{p.Name} is {DirectionToGas.Distance} from here. It will take you {DirectionToGas.Duration} to get there.");
-                                                break;
-                                            }
-                                            else if (GasChoice.ToLower() == "quit")
-                                            {
-                                                QuitProgram = true;
-                                            }
-                                            else
-                                            {
-                                                continue;
+                                                string confirmLocations = Console.ReadLine();
+                                                if (PosInputOpt.Contains(confirmLocations.ToLower()))
+                                                {
+                                                    LocationConfirmed = true;
+                                                    Console.WriteLine("Thank you for confirming! Please give me just a second as I calculate your route.");
+                                                    Directions CurrentDirections = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
+                                                    Console.WriteLine(CurrentDirections.Distance);
+                                                    Console.WriteLine(CurrentDirections.Duration);
+                                                    Console.WriteLine(CurrentDirections.RouteSummary);
+                                                    Console.WriteLine("How far do you want to go today?");
+                                                    string drivingStillToday = Console.ReadLine();
+                                                    double DrivingStillTodayDouble = Double.Parse(drivingStillToday);
+                                                    List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingStillTodayDouble);
+                                                    Console.WriteLine($"Hold on one second as I gather information about gas stations around {drivingStillToday} miles from here along your route.");
+                                                    var GasStationsNearby = ApiCalls.CallPlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
+                                                    foreach (var p in GasStationsNearby)
+                                                    {
+                                                        Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
+                                                        string GasChoice = Console.ReadLine();
+                                                        if (PosInputOpt.Contains(GasChoice.ToLower()))
+                                                        {
+                                                            Console.WriteLine($"Please hold one second as I get directions to {p.Name}");
+                                                            Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, p.PlaceId, ApiKey);
+                                                            Console.WriteLine($"{p.Name} is {DirectionToGas.Distance} from here. It will take you {DirectionToGas.Duration} to get there.");
+                                                            break;
+                                                        }
+                                                        else if (GasChoice.ToLower() == "quit")
+                                                        {
+                                                            QuitProgram = true;
+                                                        }
+                                                        else
+                                                        {
+                                                            continue;
+                                                        }
+                                                    }
+                                                }
+                                                else if (NegInputOpt.Contains(confirmLocations.ToLower()))
+                                                {
+                                                    Console.WriteLine("It looks like you found an error in one of the locations that I just mentioned. Please indicate which location is incorrect, so that we can go ahead and get it fixed.");
+                                                    Console.WriteLine("If it is the first location (Origin), please indicate that by stating that it was the first or the origin. If it is the second location (Destination), please indicate that by stating that it was the second or the destination.");
+                                                    string[] OriginArr = { "origin", "first", "1st", "1", "start" };
+                                                    List<string> Origin = new List<string>(OriginArr);
+                                                    string[] DestArr = { "destination", "second", "2nd", "2", "end" };
+                                                    List<string> Destination = new List<string>(DestArr);
+                                                    string IncorrectLocation = Console.ReadLine();
+                                                    if (Origin.Contains(IncorrectLocation.ToLower()))
+                                                    {
+                                                        //needs to go back to origin
+                                                    }
+                                                    else if (Destination.Contains(IncorrectLocation.ToLower()))
+                                                    {
+                                                        //needs to go back to destination
+                                                    }
+                                                    else
+                                                    {
+                                                        //needs to loop back until user says if the error is in the first or second location
+                                                        Console.WriteLine("i'm not sure what you meant");
+                                                    }
+                                                }
+                                                else if (confirmLocations.ToLower() == "quit")
+                                                {
+                                                    QuitProgram = true;
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine("I'm sorry, but I couldn't determine what you meant. Please give me a more direct positive or negative response.");
+                                                }
                                             }
                                         }
-                                    }
-                                    else if (confirmLocations.ToLower() == "quit")
-                                    {
-                                        QuitProgram = true;
+                                        else
+                                        {
+                                            Console.WriteLine("I'm sorry, but there was an error with your input. Please try again.");
+                                            continue;
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    Console.WriteLine("I'm sorry, but there was an error with your request. Please try again.");
+                                    Console.WriteLine("I'm sorry, but there was an error with your input. Please try again.");
+                                    continue;
                                 }
                             }
                             else if (ApiKey.ToLower() == "quit")
