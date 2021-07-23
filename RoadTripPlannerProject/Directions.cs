@@ -5,6 +5,7 @@ namespace RoadTripPlannerProject
 {
     public class Directions
     {
+        public string Status { get; set; }
         public string Distance { get; set; }
         public string Duration { get; set; }
         public string RouteSummary { get; set; }
@@ -60,8 +61,9 @@ namespace RoadTripPlannerProject
             }
         }
 
-        public Directions(string distance, string duration, string routeSummary, IEnumerable<PolyLineCoordinates> points)
+        public Directions(string status, string distance, string duration, string routeSummary, IEnumerable<PolyLineCoordinates> points)
         {
+            Status = status;
             Distance = distance;
             Duration = duration;
             RouteSummary = routeSummary;

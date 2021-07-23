@@ -14,8 +14,8 @@ namespace RoadTripPlannerProject
     {
         static void Main(string[] args)
         {
-            bool QuitProgram = true;
-            while (QuitProgram == true)
+            bool QuitProgram = false;
+            while (QuitProgram == false)
             {
                 Console.WriteLine("Hello, I’m here to help you plan stops on your road trip! As we begin, I’m going to ask you a few questions to help make some calculations and get you the best results.");
                 Console.WriteLine("Are you ready to begin ?");
@@ -63,7 +63,7 @@ namespace RoadTripPlannerProject
                                         double DrivingStillTodayDouble = Double.Parse(drivingStillToday);
                                         List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingStillTodayDouble);
                                         Console.WriteLine($"Hold on one second as I gather information about gas stations around {drivingStillToday} miles from here along your route.");
-                                        var GasStationsNearby = ApiCalls.PlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
+                                        var GasStationsNearby = ApiCalls.CallPlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
                                         foreach (var p in GasStationsNearby)
                                         {
                                             Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
@@ -77,7 +77,7 @@ namespace RoadTripPlannerProject
                                             }
                                             else if (GasChoice.ToLower() == "quit")
                                             {
-                                                QuitProgram = false;
+                                                QuitProgram = true;
                                             }
                                             else
                                             {
@@ -87,7 +87,7 @@ namespace RoadTripPlannerProject
                                     }
                                     else if (confirmLocations.ToLower() == "quit")
                                     {
-                                        QuitProgram = false;
+                                        QuitProgram = true;
                                     }
                                 }
                                 else
@@ -97,7 +97,7 @@ namespace RoadTripPlannerProject
                             }
                             else if (ApiKey.ToLower() == "quit")
                             {
-                                QuitProgram = false;
+                                QuitProgram = true;
                             }
                             else
                             {
@@ -109,7 +109,7 @@ namespace RoadTripPlannerProject
                 }
                 else if (ready.ToLower() == "quit")
                 {
-                    QuitProgram = false;
+                    QuitProgram = true;
                 }
                 else
                 {
