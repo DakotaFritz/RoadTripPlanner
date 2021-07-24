@@ -57,7 +57,7 @@ namespace RoadTripPlannerProject
             return ApiKey;
         }
 
-        public static string ConfirmLocationsInput(LocationWithGeoCode currLoc, LocationWithGeoCode destLoc, string apiKey)
+        public static (LocationWithGeoCode current, LocationWithGeoCode destination) ConfirmLocationsInput(LocationWithGeoCode currLoc, LocationWithGeoCode destLoc, string apiKey)
         {
             string confirmLocations = "";
             bool Confirmed = false;
@@ -70,7 +70,7 @@ namespace RoadTripPlannerProject
                 {
                     Confirmed = true;
                     Console.WriteLine("Thank you for confirming! Please give me just a second as I calculate your route.");
-                    return confirmLocations;
+                    return (currLoc, destLoc);
                 }
                 else if (NegInputOpt.Contains(confirmLocations.ToLower()))
                 {
@@ -110,7 +110,7 @@ namespace RoadTripPlannerProject
                 else if (confirmLocations.ToLower() == "quit")
                 {
                     Confirmed = true;
-                    return confirmLocations.ToLower();
+                    return (currLoc, destLoc);
                 }
                 else
                 {
@@ -118,7 +118,7 @@ namespace RoadTripPlannerProject
                     continue;
                 }
             }
-            return confirmLocations;
+            return (currLoc, destLoc);
         }
 
         public static double DrivingTodayInput()
