@@ -12,7 +12,7 @@ namespace RoadTripPlannerProject
         private static string[] NegInputOptArr = { "nah", "no", "nope" };
         public static List<string> NegInputOpt = new List<string>(NegInputOptArr);
 
-        public static string ReadyToStart()
+        public static string ReadyToStartInput()
         {
             string Ready = "";
             while (Ready.ToLower() != "quit" || PosInputOpt.Contains(Ready.ToLower()))
@@ -57,7 +57,7 @@ namespace RoadTripPlannerProject
             return ApiKey;
         }
 
-        public static string ConfirmLocations(LocationWithGeoCode currLoc, LocationWithGeoCode destLoc, string apiKey)
+        public static string ConfirmLocationsInput(LocationWithGeoCode currLoc, LocationWithGeoCode destLoc, string apiKey)
         {
             string confirmLocations = "";
             bool Confirmed = false;
@@ -119,6 +119,22 @@ namespace RoadTripPlannerProject
                 }
             }
             return confirmLocations;
+        }
+
+        public static double DrivingTodayInput()
+        {
+            bool isDouble = false;
+            double DrivingStillTodayDouble = 0;
+            while (isDouble == false)
+            {
+                string drivingStillToday = Console.ReadLine();
+                isDouble = double.TryParse(drivingStillToday, out DrivingStillTodayDouble);
+                if (isDouble == false)
+                {
+                    continue;
+                }
+            }
+            return DrivingStillTodayDouble;
         }
 
         public UserInput()

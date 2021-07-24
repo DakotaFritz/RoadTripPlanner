@@ -17,7 +17,7 @@ namespace RoadTripPlannerProject
 
                 Console.WriteLine("Hello, I’m here to help you plan stops on your road trip! As we begin, I’m going to ask you a few questions to help make some calculations and get you the best results.");
                 Console.WriteLine("Are you ready to begin ?");
-                string Ready = UserInput.ReadyToStart();
+                string Ready = UserInput.ReadyToStartInput();
                 if (Ready == "quit")
                 {
                     break;
@@ -67,7 +67,7 @@ namespace RoadTripPlannerProject
                 }
 
 
-                UserInput.ConfirmLocations(CurrentLocation, DestinationLocation, ApiKey);
+                UserInput.ConfirmLocationsInput(CurrentLocation, DestinationLocation, ApiKey);
 
                 Directions CurrentDirections = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
                 Console.WriteLine(CurrentDirections.Distance);
@@ -78,10 +78,9 @@ namespace RoadTripPlannerProject
                 while (DrivingTodayIsDouble == false)
                 {
                     Console.WriteLine("How far do you want to go today?");
-                    string drivingStillToday = Console.ReadLine();
-                    double.TryParse(drivingStillToday, out double DrivingStillTodayDouble);
-                    List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingStillTodayDouble);
-                    Console.WriteLine($"Hold on one second as I gather information about gas stations around {DrivingStillTodayDouble} miles from here along your route.");
+                    double DrivingToday = UserInput.DrivingTodayInput();
+                    List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingToday);
+                    Console.WriteLine($"Hold on one second as I gather information about gas stations around {DrivingToday} miles from here along your route.");
                     var GasStationsNearby = ApiCalls.CallPlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
                     foreach (var p in GasStationsNearby)
                     {
