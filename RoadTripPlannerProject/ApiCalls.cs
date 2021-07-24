@@ -42,9 +42,10 @@ namespace RoadTripPlannerProject
             {
                 string apiResponse = webClient.DownloadString($"{DirectionsApiLink}origin=place_id:{CurrentLocation}&destination=place_id:{Destination}&key={apiKey}");
                 DirectionsApiResponse.Root ResponseObjects = JsonConvert.DeserializeObject<DirectionsApiResponse.Root>(apiResponse);
+                DirectionsApiResponse.Route Route = ResponseObjects.Routes.First();
                 if (!DirErr.Contains(ResponseObjects.Status))
                 {
-                    return new Directions(ResponseObjects.Status, ResponseObjects.Routes[0].Legs[0].Distance.Text, ResponseObjects.Routes[0].Legs[0].Duration.Text, ResponseObjects.Routes[0].Summary, Directions.Decode(ResponseObjects.Routes[0].Overview_Polyline.Points));
+                    return new Directions(ResponseObjects.Status, Route.Legs.First().Distance.Text, Route.Legs.First().Duration.Text, Route.Summary, Directions.Decode(Route.Overview_Polyline.Points));
                 }
                 else
                 {
