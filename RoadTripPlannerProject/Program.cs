@@ -66,58 +66,8 @@ namespace RoadTripPlannerProject
                     }
                 }
 
-                bool LocationConfirmed = false;
-                while (LocationConfirmed == false)
-                {
-                    Console.WriteLine($"Thank you! Just to confirm, you are currently in {CurrentLocation.Location} and driving to {DestinationLocation.Location}, right? If this is incorrect, please type \"No\"");
-                    string confirmLocations = Console.ReadLine();
-                    if (UserInput.PosInputOpt.Contains(confirmLocations.ToLower()))
-                    {
-                        LocationConfirmed = true;
-                        Console.WriteLine("Thank you for confirming! Please give me just a second as I calculate your route.");
-                    }
-                    else if (UserInput.NegInputOpt.Contains(confirmLocations.ToLower()))
-                    {
-                        Console.WriteLine("It looks like you found an error in one of the locations that I just mentioned. Please indicate which location is incorrect, so that we can go ahead and get it fixed.");
-                        Console.WriteLine("If it is the first location (Origin), please indicate that by stating that it was the first or the origin. If it is the second location (Destination), please indicate that by stating that it was the second or the destination.");
-                        string[] OriginArr = { "origin", "first", "1st", "1", "start" };
-                        List<string> Origin = new List<string>(OriginArr);
-                        string[] DestArr = { "destination", "second", "2nd", "2", "end" };
-                        List<string> Destination = new List<string>(DestArr);
-                        string IncorrectLocation = Console.ReadLine();
-                        if (Origin.Contains(IncorrectLocation.ToLower()))
-                        {
-                            Console.WriteLine("Thank you for letting me know that the origin for your trip is incorrect. Please go ahead and enter the correct location below.");
-                            string CorrectedOrigin = Console.ReadLine();
-                            CurrentLocation = ApiCalls.CallGeoCodeApi(CorrectedOrigin, ApiKey);
-                            continue;
-                        }
-                        else if (Destination.Contains(IncorrectLocation.ToLower()))
-                        {
-                            Console.WriteLine("Thank you for letting me know that the destination for your trip is incorrect. Please go ahead and enter the correct location below.");
-                            string CorrectedDest = Console.ReadLine();
-                            DestinationLocation = ApiCalls.CallGeoCodeApi(CorrectedDest, ApiKey);
-                            continue;
-                        }
-                        else if (IncorrectLocation.ToLower() == "quit")
-                        {
-                            QuitProgram = true;
-                        }
-                        else
-                        {
-                            Console.WriteLine("I wasn't able to determine which location was incorrect from your input. You are about to be re-directed to where you can confirm locations or change them again.");
-                            continue;
-                        }
-                    }
-                    else if (confirmLocations.ToLower() == "quit")
-                    {
-                        QuitProgram = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("I'm sorry, but I couldn't determine what you meant. Please give me a more direct positive or negative response.");
-                    }
-                }
+
+                UserInput.ConfirmLocations(CurrentLocation, DestinationLocation, ApiKey);
 
                 Directions CurrentDirections = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);
                 Console.WriteLine(CurrentDirections.Distance);
