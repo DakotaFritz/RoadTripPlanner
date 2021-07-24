@@ -111,6 +111,9 @@ namespace RoadTripPlannerProject
                                                     else if (Destination.Contains(IncorrectLocation.ToLower()))
                                                     {
                                                         //needs to go back to destination
+                                                        Console.WriteLine("Thank you for letting me know that the destination for your trip is incorrect. Please go ahead and enter the correct location below.");
+                                                        string CorrectedDest = Console.ReadLine();
+                                                        DestinationLocation = ApiCalls.CallGeoCodeApi(CorrectedDest, ApiKey);
                                                     }
                                                     else
                                                     {
