@@ -64,30 +64,36 @@ namespace RoadTripPlannerProject
                                                     Console.WriteLine(CurrentDirections.Distance);
                                                     Console.WriteLine(CurrentDirections.Duration);
                                                     Console.WriteLine(CurrentDirections.RouteSummary);
-                                                    Console.WriteLine("How far do you want to go today?");
-                                                    string drivingStillToday = Console.ReadLine();
-                                                    double DrivingStillTodayDouble = Double.Parse(drivingStillToday);
-                                                    List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingStillTodayDouble);
-                                                    Console.WriteLine($"Hold on one second as I gather information about gas stations around {drivingStillToday} miles from here along your route.");
-                                                    var GasStationsNearby = ApiCalls.CallPlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
-                                                    foreach (var p in GasStationsNearby)
+
+                                                    bool DrivingTodayIsDouble = false;
+                                                    while (DrivingTodayIsDouble == false)
                                                     {
-                                                        Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
-                                                        string GasChoice = Console.ReadLine();
-                                                        if (PosInputOpt.Contains(GasChoice.ToLower()))
+                                                        //Need to add an if here to verify that a number was input.
+                                                        Console.WriteLine("How far do you want to go today?");
+                                                        string drivingStillToday = Console.ReadLine();
+                                                        double.TryParse(drivingStillToday, out double DrivingStillTodayDouble);
+                                                        List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingStillTodayDouble);
+                                                        Console.WriteLine($"Hold on one second as I gather information about gas stations around {DrivingStillTodayDouble} miles from here along your route.");
+                                                        var GasStationsNearby = ApiCalls.CallPlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
+                                                        foreach (var p in GasStationsNearby)
                                                         {
-                                                            Console.WriteLine($"Please hold one second as I get directions to {p.Name}");
-                                                            Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, p.PlaceId, ApiKey);
-                                                            Console.WriteLine($"{p.Name} is {DirectionToGas.Distance} from here. It will take you {DirectionToGas.Duration} to get there.");
-                                                            break;
-                                                        }
-                                                        else if (GasChoice.ToLower() == "quit")
-                                                        {
-                                                            QuitProgram = true;
-                                                        }
-                                                        else
-                                                        {
-                                                            continue;
+                                                            Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
+                                                            string GasChoice = Console.ReadLine();
+                                                            if (PosInputOpt.Contains(GasChoice.ToLower()))
+                                                            {
+                                                                Console.WriteLine($"Please hold one second as I get directions to {p.Name}");
+                                                                Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, p.PlaceId, ApiKey);
+                                                                Console.WriteLine($"{p.Name} is {DirectionToGas.Distance} from here. It will take you {DirectionToGas.Duration} to get there.");
+                                                                break;
+                                                            }
+                                                            else if (GasChoice.ToLower() == "quit")
+                                                            {
+                                                                QuitProgram = true;
+                                                            }
+                                                            else
+                                                            {
+                                                                continue;
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -114,11 +120,16 @@ namespace RoadTripPlannerProject
                                                         Console.WriteLine("Thank you for letting me know that the destination for your trip is incorrect. Please go ahead and enter the correct location below.");
                                                         string CorrectedDest = Console.ReadLine();
                                                         DestinationLocation = ApiCalls.CallGeoCodeApi(CorrectedDest, ApiKey);
+                                                        continue;
+                                                    }
+                                                    else if (IncorrectLocation.ToLower() == "quit")
+                                                    {
+                                                        QuitProgram = true;
                                                     }
                                                     else
                                                     {
-                                                        //needs to loop back until user says if the error is in the first or second location
-                                                        Console.WriteLine("i'm not sure what you meant");
+                                                        Console.WriteLine("I wasn't able to determine which location was incorrect from your input. You are about to be re-directed to where you can confirm locations or change them again.");
+                                                        continue;
                                                     }
                                                 }
                                                 else if (confirmLocations.ToLower() == "quit")
