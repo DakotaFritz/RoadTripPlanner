@@ -50,11 +50,11 @@ namespace RoadTripPlannerProject
                                         if (!ApiCalls.GeoCodeErr.Contains(DestinationLocation.Status))
                                         {
                                             SecondApiSuccess = true;
-                                            Console.WriteLine($"Thank you! Just to confirm, you are currently in {CurrentLocation.Location} and driving to {DestinationLocation.Location}, right? If this is incorrect, please type \"No\"");
 
                                             bool LocationConfirmed = false;
                                             while (LocationConfirmed == false)
                                             {
+                                                Console.WriteLine($"Thank you! Just to confirm, you are currently in {CurrentLocation.Location} and driving to {DestinationLocation.Location}, right? If this is incorrect, please type \"No\"");
                                                 string confirmLocations = Console.ReadLine();
                                                 if (PosInputOpt.Contains(confirmLocations.ToLower()))
                                                 {
@@ -103,6 +103,10 @@ namespace RoadTripPlannerProject
                                                     if (Origin.Contains(IncorrectLocation.ToLower()))
                                                     {
                                                         //needs to go back to origin
+                                                        Console.WriteLine("Thank you for letting me know that the origin for your trip is incorrect. Please go ahead and enter the correct location below.");
+                                                        string CorrectedOrigin = Console.ReadLine();
+                                                        CurrentLocation = ApiCalls.CallGeoCodeApi(CorrectedOrigin, ApiKey);
+                                                        continue;
                                                     }
                                                     else if (Destination.Contains(IncorrectLocation.ToLower()))
                                                     {
