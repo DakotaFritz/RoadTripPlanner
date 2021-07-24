@@ -71,14 +71,14 @@ namespace RoadTripPlannerProject
                 bool DirApiSuccess = false;
                 while (DirApiSuccess == false)
                 {
-                    (LocationWithGeoCode current, LocationWithGeoCode destination) ConfirmedLocation = UserInput.ConfirmLocationsInput(CurrentLocation, DestinationLocation, ApiKey);
-                    if (ConfirmedLocation.current.Location != CurrentLocation.Location)
+                    (LocationWithGeoCode Current, LocationWithGeoCode Destination) ConfirmedLocation = UserInput.ConfirmLocationsInput(CurrentLocation, DestinationLocation, ApiKey);
+                    if (ConfirmedLocation.Current.Location != CurrentLocation.Location)
                     {
-                        CurrentLocation = ConfirmedLocation.current;
+                        CurrentLocation = ConfirmedLocation.Current;
                     }
-                    else if (ConfirmedLocation.destination.Location != DestinationLocation.Location)
+                    else if (ConfirmedLocation.Destination.Location != DestinationLocation.Location)
                     {
-                        DestinationLocation = ConfirmedLocation.destination;
+                        DestinationLocation = ConfirmedLocation.Destination;
                     }
 
                     CurrentDirections = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, DestinationLocation.PlaceId, ApiKey);

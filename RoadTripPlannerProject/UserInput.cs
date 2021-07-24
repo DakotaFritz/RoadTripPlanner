@@ -57,7 +57,7 @@ namespace RoadTripPlannerProject
             return ApiKey;
         }
 
-        public static (LocationWithGeoCode current, LocationWithGeoCode destination) ConfirmLocationsInput(LocationWithGeoCode currLoc, LocationWithGeoCode destLoc, string apiKey)
+        public static (LocationWithGeoCode, LocationWithGeoCode) ConfirmLocationsInput(LocationWithGeoCode currLoc, LocationWithGeoCode destLoc, string apiKey)
         {
             string confirmLocations = "";
             bool Confirmed = false;
