@@ -11,26 +11,16 @@ namespace RoadTripPlannerProject
             bool QuitProgram = false;
             while (QuitProgram == false)
             {
-                string[] PosInputOptArr = { "yes", "yep", "yea", "yup", "hell yeah", "heck yeah", "y", "yeah" };
-                List<string> PosInputOpt = new List<string>(PosInputOptArr);
-                string[] NegInputOptArr = { "nah", "no", "nope" };
-                List<string> NegInputOpt = new List<string>(NegInputOptArr);
-
                 string ApiKey = "";
                 LocationWithGeoCode CurrentLocation = new LocationWithGeoCode("", "", "", 0,0);
                 LocationWithGeoCode DestinationLocation = new LocationWithGeoCode("", "", "", 0, 0);
 
                 Console.WriteLine("Hello, I’m here to help you plan stops on your road trip! As we begin, I’m going to ask you a few questions to help make some calculations and get you the best results.");
                 Console.WriteLine("Are you ready to begin ?");
-                string ready = Console.ReadLine();
-                if (ready.ToLower() == "quit")
+                string Ready = UserInput.ReadyToStart();
+                if (Ready == "quit")
                 {
-                    QuitProgram = true;
-                }
-                else if (!PosInputOpt.Contains(ready.ToLower()))
-                {
-                    Console.WriteLine("I'm sorry, but I'm not sure what you were intending to say. Please say \"Quit\" if you want to quit or give me an affirmative answer.");
-                    continue;
+                    break;
                 }
 
                 bool FirstApiSuccess = false;
@@ -39,25 +29,10 @@ namespace RoadTripPlannerProject
                     Console.WriteLine("Great! Please start by telling me your current location. Note: If you enter this incorrectly, you will get a chance to update your location in a moment.");
                     string CurrentLocationInput = Console.ReadLine();
 
-                    bool ValidApiKey = false;
-                    while (ValidApiKey == false)
+                    ApiKey = UserInput.ApiKeyInput();
+                    if (ApiKey == "quit")
                     {
-                        Console.WriteLine("Sorry to bug you, but can you give me your API Key?");
-                        ApiKey = Console.ReadLine();
-                        string RgKey = "[^-a-zA-Z\\d]";
-                        if (!Regex.Match(ApiKey, RgKey).Success)
-                        {
-                            ValidApiKey = true;
-                        }
-                        else if (ApiKey.ToLower() == "quit")
-                        {
-                            QuitProgram = true;
-                        }
-                        else
-                        {
-                            Console.WriteLine("The API Key that you entered is incorrect. Google's API keys only contain alphanumeric values and dashes. Please try typing the API key again. For more information, read here: https://cloud.google.com/docs/authentication/api-keys");
-                            continue;
-                        }
+                        break;
                     }
 
                     CurrentLocation = ApiCalls.CallGeoCodeApi(CurrentLocationInput, ApiKey);
@@ -96,12 +71,12 @@ namespace RoadTripPlannerProject
                 {
                     Console.WriteLine($"Thank you! Just to confirm, you are currently in {CurrentLocation.Location} and driving to {DestinationLocation.Location}, right? If this is incorrect, please type \"No\"");
                     string confirmLocations = Console.ReadLine();
-                    if (PosInputOpt.Contains(confirmLocations.ToLower()))
+                    if (UserInput.PosInputOpt.Contains(confirmLocations.ToLower()))
                     {
                         LocationConfirmed = true;
                         Console.WriteLine("Thank you for confirming! Please give me just a second as I calculate your route.");
                     }
-                    else if (NegInputOpt.Contains(confirmLocations.ToLower()))
+                    else if (UserInput.NegInputOpt.Contains(confirmLocations.ToLower()))
                     {
                         Console.WriteLine("It looks like you found an error in one of the locations that I just mentioned. Please indicate which location is incorrect, so that we can go ahead and get it fixed.");
                         Console.WriteLine("If it is the first location (Origin), please indicate that by stating that it was the first or the origin. If it is the second location (Destination), please indicate that by stating that it was the second or the destination.");
@@ -162,7 +137,7 @@ namespace RoadTripPlannerProject
                     {
                         Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
                         string GasChoice = Console.ReadLine();
-                        if (PosInputOpt.Contains(GasChoice.ToLower()))
+                        if (UserInput.PosInputOpt.Contains(GasChoice.ToLower()))
                         {
                             Console.WriteLine($"Please hold one second as I get directions to {p.Name}");
                             Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, p.PlaceId, ApiKey);
