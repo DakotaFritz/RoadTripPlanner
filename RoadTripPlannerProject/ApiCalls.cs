@@ -24,7 +24,7 @@ namespace RoadTripPlannerProject
                 GeoCodeApiResponse.RootObject ResponseObjects = JsonConvert.DeserializeObject<GeoCodeApiResponse.RootObject>(apiResponse);
                 if (!GeoCodeErr.Contains(ResponseObjects.Status))
                 {
-                    return new LocationWithGeoCode(ResponseObjects.Status, ResponseObjects.Results1[0].FormattedAddress, ResponseObjects.Results1[0].PlaceId, ResponseObjects.Results1[0].Geometry.Location.Lng, ResponseObjects.Results1[0].Geometry.Location.Lat);
+                    return new LocationWithGeoCode(ResponseObjects.Status, ResponseObjects.Results[0].FormattedAddress, ResponseObjects.Results[0].PlaceId, ResponseObjects.Results[0].Geometry.Location.Lng, ResponseObjects.Results[0].Geometry.Location.Lat);
                 }
                 else
                 {
@@ -42,14 +42,14 @@ namespace RoadTripPlannerProject
             {
                 string apiResponse = webClient.DownloadString($"{DirectionsApiLink}origin=place_id:{CurrentLocation}&destination=place_id:{Destination}&key={apiKey}");
                 DirectionsApiResponse.Root ResponseObjects = JsonConvert.DeserializeObject<DirectionsApiResponse.Root>(apiResponse);
-                if (!DirErr.Contains(ResponseObjects.status))
+                if (!DirErr.Contains(ResponseObjects.Status))
                 {
-                    return new Directions(ResponseObjects.status, ResponseObjects.routes[0].legs[0].distance.text, ResponseObjects.routes[0].legs[0].duration.text, ResponseObjects.routes[0].summary, Directions.Decode(ResponseObjects.routes[0].overview_polyline.points));
+                    return new Directions(ResponseObjects.Status, ResponseObjects.Routes[0].Legs[0].Distance.Text, ResponseObjects.Routes[0].Legs[0].Duration.Text, ResponseObjects.Routes[0].Summary, Directions.Decode(ResponseObjects.Routes[0].Overview_Polyline.Points));
                 }
                 else
                 {
                     IEnumerable<PolyLineCoordinates> emptyPolyLine = null;
-                    return new Directions(ResponseObjects.status, "", "", "", emptyPolyLine);
+                    return new Directions(ResponseObjects.Status, "", "", "", emptyPolyLine);
                 }
             }
         }
@@ -72,8 +72,5 @@ namespace RoadTripPlannerProject
             }
         }
 
-        public ApiCalls()
-        {
-        }
     }
 }

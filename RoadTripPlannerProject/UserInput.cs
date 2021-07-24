@@ -136,9 +136,5 @@ namespace RoadTripPlannerProject
             }
             return DrivingStillTodayDouble;
         }
-
-        public UserInput()
-        {
-        }
     }
 }
