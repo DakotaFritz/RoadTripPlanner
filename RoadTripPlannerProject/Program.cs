@@ -98,7 +98,7 @@ namespace RoadTripPlannerProject
 
 
                 Console.WriteLine("How far do you want to go today?");
-                double DrivingToday = UserInput.DrivingTodayInput();
+                double DrivingToday = UserInput.DrivingTodayInput(CurrentDirections.DistanceDouble);
                 List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingToday);
                 Console.WriteLine($"Hold on one second as I gather information about gas stations around {DrivingToday} miles from here along your route.");
                 var GasStationsNearby = ApiCalls.CallPlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);

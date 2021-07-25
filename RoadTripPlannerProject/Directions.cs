@@ -7,6 +7,7 @@ namespace RoadTripPlannerProject
     {
         public string Status { get; set; }
         public string Distance { get; set; }
+        public double DistanceDouble { get; set; }
         public string Duration { get; set; }
         public string RouteSummary { get; set; }
         public IEnumerable<PolyLineCoordinates> Points { get; set; }
@@ -75,6 +76,12 @@ namespace RoadTripPlannerProject
         {
             Status = status;
             Distance = distance;
+            double DistanceToDouble = 0;
+            if (distance != "")
+            {
+                double.TryParse(distance.Substring(0, distance.Length - 3), out DistanceToDouble);
+            }
+            DistanceDouble = DistanceToDouble;
             Duration = duration;
             RouteSummary = routeSummary;
             Points = points;

@@ -140,17 +140,31 @@ namespace RoadTripPlannerProject
             return (currLoc, destLoc);
         }
 
-        public static double DrivingTodayInput()
+        public static double DrivingTodayInput(double distance)
         {
-            bool isDouble = false;
             double DrivingStillTodayDouble = 0;
-            while (isDouble == false)
+            bool LessThanDistance = false;
+            while (LessThanDistance == false)
             {
-                string drivingStillToday = Console.ReadLine();
-                isDouble = double.TryParse(drivingStillToday, out DrivingStillTodayDouble);
-                if (isDouble == false)
+                bool isDouble = false;
+                while (isDouble == false)
                 {
+                    string drivingStillToday = Console.ReadLine();
+                    isDouble = double.TryParse(drivingStillToday, out DrivingStillTodayDouble);
+                    if (isDouble == false)
+                    {
+                        Console.WriteLine("Sorry, please enter only numbers. For example, if you mean 50 miles, please enter \"50\".");
+                        continue;
+                    }
+                }
+                if (DrivingStillTodayDouble > distance)
+                {
+                    Console.WriteLine($"The number that you entered is larger than the distance for the route that you are driving. Please enter a number less than {Math.Round(distance, 1)}");
                     continue;
+                }
+                else
+                {
+                    LessThanDistance = true;
                 }
             }
             return DrivingStillTodayDouble;
