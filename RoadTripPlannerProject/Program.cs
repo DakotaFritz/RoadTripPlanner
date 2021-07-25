@@ -16,7 +16,9 @@ namespace RoadTripPlannerProject
                 LocationWithGeoCode DestinationLocation = new LocationWithGeoCode("", "", "", 0, 0);
                 IEnumerable<PolyLineCoordinates> emptyPolyLine = null;
                 Directions CurrentDirections = new Directions("", "", "", "", emptyPolyLine);
-               
+                List<PlacesNearby> GasStationsNearby = new List<PlacesNearby>();
+
+
                 Console.WriteLine("Hello, I’m here to help you plan stops on your road trip! As we begin, I’m going to ask you a few questions to help make some calculations and get you the best results.");
                 Console.WriteLine("Are you ready to begin ?");
                 string Ready = UserInput.ReadyToStartInput();
@@ -96,12 +98,20 @@ namespace RoadTripPlannerProject
                 Console.WriteLine(CurrentDirections.Duration);
                 Console.WriteLine(CurrentDirections.RouteSummary);
 
+                bool GasStationsInArea = false;
+                while (GasStationsInArea == false)
+                {
+                    Console.WriteLine("How far do you want to go today?");
+                    double DrivingToday = UserInput.DrivingTodayInput(CurrentDirections.DistanceDouble);
+                    List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingToday);
+                    Console.WriteLine($"Hold on one second as I gather information about gas stations around {DrivingToday} miles from here along your route.");
+                    GasStationsNearby = ApiCalls.CallPlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
 
-                Console.WriteLine("How far do you want to go today?");
-                double DrivingToday = UserInput.DrivingTodayInput(CurrentDirections.DistanceDouble);
-                List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingToday);
-                Console.WriteLine($"Hold on one second as I gather information about gas stations around {DrivingToday} miles from here along your route.");
-                var GasStationsNearby = ApiCalls.CallPlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
+                    if (GasStationsNearby.Count != 0)
+                    {
+                        GasStationsInArea = true;
+                    }
+                }
 
                 bool GasStationSelected = false;
                 while (GasStationSelected == false)
