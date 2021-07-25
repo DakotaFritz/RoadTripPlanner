@@ -6,12 +6,18 @@ namespace RoadTripPlannerProject
 {
     public class UserInput
     {
-
+        /// <summary>
+        /// Lists of positive and negative inputs created to allow for greater flexibility in accepable inputs
+        /// </summary>
         private static string[] PosInputOptArr = { "yes", "yep", "yea", "yup", "hell yeah", "heck yeah", "y", "yeah" };
         public static List<string> PosInputOpt = new List<string>(PosInputOptArr);
         private static string[] NegInputOptArr = { "nah", "no", "nope" };
         public static List<string> NegInputOpt = new List<string>(NegInputOptArr);
 
+        /// <summary>
+        /// Reads input and evaluates to see if it is either a positive response or "quit". If it meets either condition, the string is returned. If it matches neither, it will continue to loop until either condition is met.
+        /// </summary>
+        /// <returns>String matching a positive response or the word "quit"</returns>
         public static string ReadyToStartInput()
         {
             string Ready = "";
@@ -31,6 +37,10 @@ namespace RoadTripPlannerProject
             return Ready.ToLower();
         }
 
+        /// <summary>
+        /// Reads input and uses RegEx to make sure that ApiKey entered matches Google's ApiKey norms (alphanumeric and dashes). If input does not match criteria, it will continue to loop until the input matches the RegEx test.
+        /// </summary>
+        /// <returns>String that matches Google's ApiKey norms</returns>
         public static string ApiKeyInput()
         {
             string ApiKey = "";
@@ -57,6 +67,13 @@ namespace RoadTripPlannerProject
             return ApiKey;
         }
 
+        /// <summary>
+        /// Confirms that the locations that have already been input are correct before calling the Directions API. If either location is incorrect, the user can update them.
+        /// </summary>
+        /// <param name="currLoc">The origin location object</param>
+        /// <param name="destLoc">The destination location object</param>
+        /// <param name="apiKey">The API Key inherited from previous input</param>
+        /// <returns>Both the origin and destination location, whether they have been updated or not</returns>
         public static (LocationWithGeoCode, LocationWithGeoCode) ConfirmLocationsInput(LocationWithGeoCode currLoc, LocationWithGeoCode destLoc, string apiKey)
         {
             string confirmLocations = "";
@@ -87,6 +104,7 @@ namespace RoadTripPlannerProject
                     {
                         Console.WriteLine("Thank you for letting me know that the origin for your trip is incorrect. Please go ahead and enter the correct location below.");
                         string CorrectedOrigin = Console.ReadLine();
+                        // Makes new API call to override the current origin location
                         currLoc = ApiCalls.CallGeoCodeApi(CorrectedOrigin, apiKey);
                         continue;
                     }
@@ -94,6 +112,7 @@ namespace RoadTripPlannerProject
                     {
                         Console.WriteLine("Thank you for letting me know that the destination for your trip is incorrect. Please go ahead and enter the correct location below.");
                         string CorrectedDest = Console.ReadLine();
+                        // Makes new API call to override the current destination location
                         destLoc = ApiCalls.CallGeoCodeApi(CorrectedDest, apiKey);
                         continue;
                     }

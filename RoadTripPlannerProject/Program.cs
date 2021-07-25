@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace RoadTripPlannerProject
 {
@@ -11,12 +10,13 @@ namespace RoadTripPlannerProject
             bool QuitProgram = false;
             while (QuitProgram == false)
             {
+                // API Key, and API Response variables are stored in global scope so it will be accesible to multiple methods
                 string ApiKey = "";
                 LocationWithGeoCode CurrentLocation = new LocationWithGeoCode("", "", "", 0,0);
                 LocationWithGeoCode DestinationLocation = new LocationWithGeoCode("", "", "", 0, 0);
                 IEnumerable<PolyLineCoordinates> emptyPolyLine = null;
                 Directions CurrentDirections = new Directions("", "", "", "", emptyPolyLine);
-
+               
                 Console.WriteLine("Hello, I’m here to help you plan stops on your road trip! As we begin, I’m going to ask you a few questions to help make some calculations and get you the best results.");
                 Console.WriteLine("Are you ready to begin ?");
                 string Ready = UserInput.ReadyToStartInput();
@@ -106,16 +106,16 @@ namespace RoadTripPlannerProject
                 bool GasStationSelected = false;
                 while (GasStationSelected == false)
                 {
-                    foreach (var p in GasStationsNearby)
+                    foreach (var g in GasStationsNearby)
                     {
-                        Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
+                        Console.WriteLine($"Would you like to go to {g.Name}? I have confirmed that it is currently open.");
                         string GasChoice = Console.ReadLine();
                         if (UserInput.PosInputOpt.Contains(GasChoice.ToLower()))
                         {
                             GasStationSelected = true;
-                            Console.WriteLine($"Please hold one second as I get directions to {p.Name}");
-                            Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, p.PlaceId, ApiKey);
-                            Console.WriteLine($"{p.Name} is {DirectionToGas.Distance} from here. It will take you {DirectionToGas.Duration} to get there.");
+                            Console.WriteLine($"Please hold one second as I get directions to {g.Name}");
+                            Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, g.PlaceId, ApiKey);
+                            Console.WriteLine($"{g.Name} is {DirectionToGas.Distance} from here. It will take you {DirectionToGas.Duration} to get there.");
                             break;
                         }
                         else if (GasChoice.ToLower() == "quit")
