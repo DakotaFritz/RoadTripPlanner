@@ -50,9 +50,5 @@ namespace RoadTripPlannerProject
             [JsonProperty("warningMessage")]
             public string WarningMessage { get; set; }
         }
-
-        public SpeedLimitApiResponse()
-        {
-        }
     }
 }
