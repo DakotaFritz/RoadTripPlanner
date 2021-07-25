@@ -12,7 +12,7 @@ namespace RoadTripPlannerProject
             {
                 // API Key, and API Response variables are stored in global scope so it will be accesible to multiple methods
                 string ApiKey = "";
-                LocationWithGeoCode CurrentLocation = new LocationWithGeoCode("", "", "", 0,0);
+                LocationWithGeoCode CurrentLocation = new LocationWithGeoCode("", "", "", 0, 0);
                 LocationWithGeoCode DestinationLocation = new LocationWithGeoCode("", "", "", 0, 0);
                 IEnumerable<PolyLineCoordinates> emptyPolyLine = null;
                 Directions CurrentDirections = new Directions("", "", "", "", emptyPolyLine);
@@ -102,7 +102,7 @@ namespace RoadTripPlannerProject
                 while (GasStationsInArea == false)
                 {
                     Console.WriteLine("How far do you want to go today?");
-                    double DrivingToday = UserInput.DrivingTodayInput(CurrentDirections.DistanceDouble);
+                    double DrivingToday = UserInput.DrivingTodayInput(CurrentDirections.Points, CurrentDirections.DistanceDouble);
                     List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingToday);
                     Console.WriteLine($"Hold on one second as I gather information about gas stations around {DrivingToday} miles from here along your route.");
                     GasStationsNearby = ApiCalls.CallPlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
@@ -110,6 +110,10 @@ namespace RoadTripPlannerProject
                     if (GasStationsNearby.Count != 0)
                     {
                         GasStationsInArea = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Well, that's embarrassing. It looks like there are no options within a 5 mile radius of that location. Please try again.");
                     }
                 }
 

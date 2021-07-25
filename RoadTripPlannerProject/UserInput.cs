@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace RoadTripPlannerProject
@@ -140,7 +141,7 @@ namespace RoadTripPlannerProject
             return (currLoc, destLoc);
         }
 
-        public static double DrivingTodayInput(double distance)
+        public static double DrivingTodayInput(IEnumerable<PolyLineCoordinates> points, double distance)
         {
             double DrivingStillTodayDouble = 0;
             bool LessThanDistance = false;
@@ -157,10 +158,19 @@ namespace RoadTripPlannerProject
                         continue;
                     }
                 }
-                if (DrivingStillTodayDouble > distance)
+                if (DrivingStillTodayDouble == 0)
+                {
+                    Console.WriteLine("You entered 0, but that is unfortunately an invalid answer. Please enter any number greater than 0.");
+                }
+                else if (DrivingStillTodayDouble > distance)
                 {
                     Console.WriteLine($"The number that you entered is larger than the distance for the route that you are driving. Please enter a number less than {Math.Round(distance, 1)}");
                     continue;
+                }
+                else if (NumericExtensions.HaversineDistance(points.ToList().ElementAt(0), points.ToList().ElementAt(1), NumericExtensions.DistanceUnit.Miles) > DrivingStillTodayDouble)
+                {
+                    Console.WriteLine(NumericExtensions.HaversineDistance(points.ToList().ElementAt(0), points.ToList().ElementAt(1), NumericExtensions.DistanceUnit.Miles));
+                    Console.WriteLine("The distance that you selected is too small. Please enter another distance.");
                 }
                 else
                 {
