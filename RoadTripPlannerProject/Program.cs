@@ -102,26 +102,58 @@ namespace RoadTripPlannerProject
                 List<PolyLineCoordinates> PointsLeftToday = NumericExtensions.DistanceToInput(CurrentDirections.Points, DrivingToday);
                 Console.WriteLine($"Hold on one second as I gather information about gas stations around {DrivingToday} miles from here along your route.");
                 var GasStationsNearby = ApiCalls.CallPlacesNearbyApi(PointsLeftToday, "gas_station", ApiKey);
-                foreach (var p in GasStationsNearby)
+
+                bool GasStationSelected = false;
+                while (GasStationSelected == false)
                 {
-                    Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
-                    string GasChoice = Console.ReadLine();
-                    if (UserInput.PosInputOpt.Contains(GasChoice.ToLower()))
+                    foreach (var p in GasStationsNearby)
                     {
-                        Console.WriteLine($"Please hold one second as I get directions to {p.Name}");
-                        Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, p.PlaceId, ApiKey);
-                        Console.WriteLine($"{p.Name} is {DirectionToGas.Distance} from here. It will take you {DirectionToGas.Duration} to get there.");
-                        break;
+                        Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
+                        string GasChoice = Console.ReadLine();
+                        if (UserInput.PosInputOpt.Contains(GasChoice.ToLower()))
+                        {
+                            GasStationSelected = true;
+                            Console.WriteLine($"Please hold one second as I get directions to {p.Name}");
+                            Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, p.PlaceId, ApiKey);
+                            Console.WriteLine($"{p.Name} is {DirectionToGas.Distance} from here. It will take you {DirectionToGas.Duration} to get there.");
+                            break;
+                        }
+                        else if (GasChoice.ToLower() == "quit")
+                        {
+                            GasStationSelected = true;
+                            QuitProgram = true;
+                        }
+                        //else
+                        //{
+                        //    continue;
+                        //}
                     }
-                    else if (GasChoice.ToLower() == "quit")
+                    if (GasStationSelected == false)
                     {
-                        QuitProgram = true;
-                    }
-                    else
-                    {
-                        continue;
+                        Console.WriteLine("You didn't select any of the options that we found. Please select one from the options.");
                     }
                 }
+
+                //foreach (var p in GasStationsNearby)
+                //{
+                //    Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
+                //    string GasChoice = Console.ReadLine();
+                //    if (UserInput.PosInputOpt.Contains(GasChoice.ToLower()))
+                //    {
+                //        Console.WriteLine($"Please hold one second as I get directions to {p.Name}");
+                //        Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, p.PlaceId, ApiKey);
+                //        Console.WriteLine($"{p.Name} is {DirectionToGas.Distance} from here. It will take you {DirectionToGas.Duration} to get there.");
+                //        break;
+                //    }
+                //    else if (GasChoice.ToLower() == "quit")
+                //    {
+                //        QuitProgram = true;
+                //    }
+                //    else
+                //    {
+                //        continue;
+                //    }
+                //}
             }
         }
     }

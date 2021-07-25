@@ -136,5 +136,6 @@ namespace RoadTripPlannerProject
             }
             return DrivingStillTodayDouble;
         }
+
     }
 }
