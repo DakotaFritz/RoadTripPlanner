@@ -169,7 +169,6 @@ namespace RoadTripPlannerProject
                 }
                 else if (NumericExtensions.HaversineDistance(points.ToList().ElementAt(0), points.ToList().ElementAt(1), NumericExtensions.DistanceUnit.Miles) > DrivingStillTodayDouble)
                 {
-                    Console.WriteLine(NumericExtensions.HaversineDistance(points.ToList().ElementAt(0), points.ToList().ElementAt(1), NumericExtensions.DistanceUnit.Miles));
                     Console.WriteLine("The distance that you selected is too small. Please enter another distance.");
                 }
                 else
