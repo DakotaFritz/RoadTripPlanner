@@ -123,37 +123,13 @@ namespace RoadTripPlannerProject
                             GasStationSelected = true;
                             QuitProgram = true;
                         }
-                        //else
-                        //{
-                        //    continue;
-                        //}
                     }
                     if (GasStationSelected == false)
                     {
                         Console.WriteLine("You didn't select any of the options that we found. Please select one from the options.");
                     }
                 }
-
-                //foreach (var p in GasStationsNearby)
-                //{
-                //    Console.WriteLine($"Would you like to go to {p.Name}? I have confirmed that it is currently open.");
-                //    string GasChoice = Console.ReadLine();
-                //    if (UserInput.PosInputOpt.Contains(GasChoice.ToLower()))
-                //    {
-                //        Console.WriteLine($"Please hold one second as I get directions to {p.Name}");
-                //        Directions DirectionToGas = ApiCalls.CallDirectionsApi(CurrentLocation.PlaceId, p.PlaceId, ApiKey);
-                //        Console.WriteLine($"{p.Name} is {DirectionToGas.Distance} from here. It will take you {DirectionToGas.Duration} to get there.");
-                //        break;
-                //    }
-                //    else if (GasChoice.ToLower() == "quit")
-                //    {
-                //        QuitProgram = true;
-                //    }
-                //    else
-                //    {
-                //        continue;
-                //    }
-                //}
+                break;
             }
         }
     }
