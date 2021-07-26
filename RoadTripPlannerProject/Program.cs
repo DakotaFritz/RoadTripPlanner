@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 
 namespace RoadTripPlannerProject
 {
@@ -30,6 +31,10 @@ namespace RoadTripPlannerProject
                 bool FirstApiSuccess = false;
                 while (FirstApiSuccess == false)
                 {
+                    string HostName = Dns.GetHostName();
+                    string MyIp = Dns.GetHostAddresses(HostName)[0].ToString();
+                    CurrentLocation = ApiCalls.CallIpGeoCodeApi(MyIp);
+                    Console.WriteLine(CurrentLocation.Location);
                     Console.WriteLine("Great! Please start by telling me your current location. Note: If you enter this incorrectly, you will get a chance to update your location in a moment.");
                     string CurrentLocationInput = Console.ReadLine();
 

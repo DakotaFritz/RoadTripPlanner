@@ -14,6 +14,33 @@ namespace RoadTripPlannerProject
         private static string[] DirErrArr = { "NOT_FOUND", "ZERO_RESULTS", "MAX_WAYPOINTS_EXCEEDED", "MAX_ROUTE_LENGTH_EXCEEDED", "INVALID_REQUEST", "OVER_DAILY_LIMIT", "OVER_QUERY_LIMIT", "REQUEST_DENIED", "UNKNOWN_ERROR" };
         public static List<string> DirErr = new List<string>(DirErrArr);
 
+        public static LocationWithGeoCode CallIpGeoCodeApi(string ip)
+        {
+            string IpGeoCodeApiLink = "http://www.geoplugin.net/json.gp?ip=";
+            using (var webClient = new WebClient())
+            {
+                string apiResponse = webClient.DownloadString($"{IpGeoCodeApiLink}{ip}");
+                IpGeoCodeApiResponse.Root ResponseObjects = JsonConvert.DeserializeObject<IpGeoCodeApiResponse.Root>(apiResponse);
+                if (ResponseObjects.Status == 200)
+                {
+                    var LatDoubParsed = double.TryParse(ResponseObjects.Latitude, out double LatParsed);
+                    var LngDoubParsed = double.TryParse(ResponseObjects.Longitude, out double LngParsed);
+                    if (LatDoubParsed == true && LngDoubParsed == true)
+                    {
+                        return new LocationWithGeoCode(ResponseObjects.Status.ToString(), string.Concat(ResponseObjects.City, ", ", ResponseObjects.RegionCode, " ", ResponseObjects.CountryName), "", LngParsed, LatParsed);
+                    }
+                    else
+                    {
+                        return new LocationWithGeoCode(ResponseObjects.Status.ToString(), string.Concat(ResponseObjects.City, ", ", ResponseObjects.RegionCode, " ", ResponseObjects.CountryName), "", 0, 0);
+                    }
+                }
+                else
+                {
+                    return new LocationWithGeoCode(ResponseObjects.Status.ToString(), "", "", 0, 0);
+                }
+            }
+        }
+
         public static LocationWithGeoCode CallGeoCodeApi(string location, string apiKey)
         {
             string GeoCodeApiLink = "https://maps.googleapis.com/maps/api/geocode/json?";
