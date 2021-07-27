@@ -97,7 +97,7 @@ namespace RoadTripPlannerProject
                 var ResultsList = new List<PlacesNearby>();
                 foreach (var r in ResponseObjects.results)
                 {
-                    var placesResponse = new PlacesNearby(r.name, r.place_id);
+                    var placesResponse = new PlacesNearby(r.name, string.Concat("place_id:",r.place_id));
                     ResultsList.Add(placesResponse);
                 }
                 return ResultsList;
