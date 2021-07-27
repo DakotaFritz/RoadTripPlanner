@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace RoadTripPlannerProject
@@ -28,35 +29,46 @@ namespace RoadTripPlannerProject
                     break;
                 }
 
+                ApiKey = UserInput.ApiKeyInput();
+                if (ApiKey == "quit")
+                {
+                    break;
+                }
+
                 bool FirstApiSuccess = false;
                 while (FirstApiSuccess == false)
                 {
-                    string HostName = Dns.GetHostName();
-                    string MyIp = Dns.GetHostAddresses(HostName)[0].ToString();
-                    CurrentLocation = ApiCalls.CallIpGeoCodeApi(MyIp);
-                    Console.WriteLine(CurrentLocation.Location);
-                    Console.WriteLine("Great! Please start by telling me your current location. Note: If you enter this incorrectly, you will get a chance to update your location in a moment.");
-                    string CurrentLocationInput = Console.ReadLine();
-
-                    ApiKey = UserInput.ApiKeyInput();
-                    if (ApiKey == "quit")
+                    CurrentLocation = ApiCalls.CallIpGeoCodeApi();
+                    bool IpLocationConfirmed = false;
+                    while (IpLocationConfirmed == false)
                     {
-                        break;
-                    }
+                        Console.WriteLine($"I was able to locate you (loosely) from your IP address. Are you starting from {CurrentLocation.Location}? If yes, please say \"Yes\". If not, please give say \"No\" and you'll have the opportunity to change your current location.");
+                        string IpLocationCorrect = Console.ReadLine();
+                        if (UserInput.NegInputOpt.Contains(IpLocationCorrect.ToLower()))
+                        {
+                            Console.WriteLine("Sorry to hear that the location I got from your IP was not accurate. Please tell me your current location.");
+                            string CurrentLocationInput = Console.ReadLine();
+                            CurrentLocation = ApiCalls.CallGeoCodeApi(CurrentLocationInput, ApiKey);
+                            IpLocationConfirmed = true;
+                        }
+                        else if (UserInput.PosInputOpt.Contains(IpLocationCorrect.ToLower()))
+                        {
+                            IpLocationConfirmed = true;
+                        }
 
-                    CurrentLocation = ApiCalls.CallGeoCodeApi(CurrentLocationInput, ApiKey);
-
-                    if (!ApiCalls.GeoCodeErr.Contains(CurrentLocation.Status))
-                    {
-                        FirstApiSuccess = true;
-                        Console.WriteLine($"Thank you for letting me know that you are in {CurrentLocation.Location}.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("I'm sorry, but there was an error with your input. Please try again.");
-                        continue;
+                        if (!ApiCalls.GeoCodeErr.Contains(CurrentLocation.Status))
+                        {
+                            FirstApiSuccess = true;
+                            Console.WriteLine($"Thank you for letting me know that you are in {CurrentLocation.Location}.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("I'm sorry, but there was an error with your input. Please try again.");
+                            continue;
+                        }
                     }
                 }
+                   
 
                 bool SecondApiSuccess = false;
                 while (SecondApiSuccess == false)
