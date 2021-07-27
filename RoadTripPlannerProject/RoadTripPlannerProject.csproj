@@ -10,6 +10,7 @@
     <None Remove="Newtonsoft.Json" />
     <None Remove="Cloudikka.PolylineAlgorithm" />
     <None Remove="ApiResponses\" />
+    <None Remove="Helpers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="GoogleApi" Version="3.10.10" />
@@ -18,5 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ApiResponses\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 </Project>
