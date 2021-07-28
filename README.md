@@ -27,14 +27,22 @@ In it's current form, this app is able to get the approximate location of the us
 
 ## Features:
 
-* **
+* **Implement a “master loop” console application where the user can repeatedly enter commands/perform actions, including choosing to exit the program**
 
-* **
+    * While loops are used in numerous places, especially to validate user input.
 
-* **
+* **Create a dictionary or list, populate it with several values, retrieve at least one value, and use it in your program**
 
-* **
+    * Lists are used in multiple classes.
 
-* **
+* **Read data from an external file, such as text, JSON, CSV, etc and use that data in your application**
 
-* **
+    * Each API response for this project is in JSON format.
+
+* **Implement a regular expression (regex) to ensure a field either a phone number or an email address is always stored and displayed in the same format**
+
+    * RegEx is used to validate the API key that is entered by the user in `ApiKeyInput()` on the `UserInput` class.
+
+* **Connect to an external/3rd party API and read data into your app**
+
+    * This app connects to 4 different APIs.
