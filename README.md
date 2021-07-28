@@ -13,7 +13,7 @@ In it's current form, this app is able to get the approximate location of the us
 
 * ** Once the API key has been submitted, the user will be presented with their location based on their IP address. Due to the API that the IP address comes from being imprecise, the location may be off by a few miles. The user will then be prompted to confirm if their IP-based location is correct or not. If the response is an expected positive response, then the app will continue using the IP-based location as the current location of the user. If the response is a negative response, the user will be prompted to type their current location instead of the IP-based location. If the response is not in either the positive or negative lists, then they will be prompted to try again.
 
-* **
+* ** Once the IP-based location has been confirmed or a new location has been entered, then 
 
 * **
 
