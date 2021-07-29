@@ -103,6 +103,5 @@ namespace RoadTripPlannerProject
                 return ResultsList;
             }
         }
-
     }
 }
