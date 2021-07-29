@@ -11,6 +11,8 @@ namespace RoadTripPlannerProject
             bool QuitProgram = false;
             while (QuitProgram == false)
             {
+                ApiCalls.TextSentimentApi("hell yeah");
+
                 // API Key, and API Response variables are stored in global scope so it will be accesible to multiple methods
                 string ApiKey = "";
                 LocationWithGeoCode CurrentLocation = new LocationWithGeoCode("", "", "", 0, 0);

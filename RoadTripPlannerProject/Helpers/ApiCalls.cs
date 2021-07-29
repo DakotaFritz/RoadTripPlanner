@@ -103,5 +103,18 @@ namespace RoadTripPlannerProject
                 return ResultsList;
             }
         }
+
+        public static void TextSentimentApi(string input)
+        {
+            string endpoint = "roadtripplanner.cognitiveservices.azure.com";
+            string RequestUrl = $"https://{endpoint}/text/analytics/v3.1/sentiment[?model-version][&showStats][&loggingOptOut][&opinionMining][&stringIndexType]";
+            using (var webClient = new WebClient())
+            {
+                webClient.Headers.Add("Ocp-Apim-Subscription-Key", "71bc35a5ceb945778f39d725d316c1bb");
+                string apiResponse = webClient.DownloadString(RequestUrl);
+                var ResponseObjects = JsonConvert.DeserializeObject<TextAnalysisApiResponse.Root>(apiResponse);
+                //return new TextAnalysisApiResponse("", string.Concat(ResponseObjects.City, ", ", ResponseObjects.Region, " ", ResponseObjects.Zip, " ", ResponseObjects.Country), ResponseObjects.Location, Location.Lat, Location.Lng);
+            }
+        }
     }
 }
